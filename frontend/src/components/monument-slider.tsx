@@ -16,21 +16,21 @@ const slides: SlideData[] = [
     title: "Taj Mahal",
     subtitle: "Symbol of Eternal Love",
     imageUrl:
-      "https://images.unsplash.com/photo-1564507592333-c60657eea523?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&h=1080",
+      "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1920&h=1080",
   },
   {
     id: 2,
     title: "Hampi",
     subtitle: "Ruins of Vijayanagara",
     imageUrl:
-      "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&h=1080",
+      "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1920&h=1080",
   },
   {
     id: 3,
     title: "Qutub Minar",
     subtitle: "Victory Tower of Delhi",
     imageUrl:
-      "https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&h=1080",
+      "https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=1920&h=1080",
   },
 ];
 
@@ -42,7 +42,7 @@ export function MonumentSlider() {
     // Trigger animation on component mount
     const timer = setTimeout(() => {
       setTriggerAnimation(true);
-    }, 1000);
+    }, 100);
 
     return () => clearTimeout(timer);
   }, []);
@@ -50,7 +50,7 @@ export function MonumentSlider() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
+    }, 500);
 
     return () => clearInterval(interval);
   }, []);
@@ -74,10 +74,10 @@ export function MonumentSlider() {
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -100, opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
             className="absolute inset-0"
           >
             <div
@@ -88,25 +88,28 @@ export function MonumentSlider() {
             >
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center text-white">
-                  <motion.div
-                    initial={{ y: 50, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
-                  >
-                    <ScrambledText
-                      text={slides[currentSlide].title}
-                      className="text-6xl md:text-8xl mb-4 text-white"
-                      trigger={triggerAnimation && currentSlide === 0}
-                    />
-                  </motion.div>
-                  <motion.p
-                    initial={{ y: 30, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.8, delay: 0.6 }}
-                    className="text-xl md:text-2xl opacity-80"
-                  >
-                    {slides[currentSlide].subtitle}
-                  </motion.p>
+                  <div className="text-center text-white flex flex-col items-center space-y-10">
+                    <motion.div
+                      initial={{ y: 50, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ duration: 0.8, delay: 0.2 }}
+                    >
+                      <ScrambledText
+                        text={slides[currentSlide].title}
+                        className="text-6xl md:text-8xl text-white"
+                        trigger={triggerAnimation && currentSlide === 0}
+                      />
+                    </motion.div>
+
+                    <motion.p
+                      initial={{ y: 30, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ duration: 0.8, delay: 0.6 }}
+                      className="text-xl md:text-2xl opacity-80"
+                    >
+                      {slides[currentSlide].subtitle}
+                    </motion.p>
+                  </div>
                 </div>
               </div>
             </div>

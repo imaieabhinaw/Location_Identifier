@@ -7,12 +7,14 @@ interface UploadZoneProps {
   onImageUpload: (file: File) => void;
   onIdentify: () => void;
   isLoading?: boolean;
+  onClearImage?: () => void;
 }
 
 export function UploadZone({
   onImageUpload,
   onIdentify,
   isLoading,
+  onClearImage,
 }: UploadZoneProps) {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
@@ -66,63 +68,65 @@ export function UploadZone({
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+    onClearImage?.();
   };
 
   return (
     <div className="space-y-6">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="glassmorphism dark:glassmorphism-dark rounded-2xl p-8 upload-zone"
-      >
-        <div
-          className={`border-2 border-dashed rounded-xl p-8 text-center transition-all ${
-            dragActive
-              ? "border-saffron bg-saffron/10"
-              : "border-saffron/60 hover:border-saffron"
-          }`}
-          onDragEnter={handleDrag}
-          onDragLeave={handleDrag}
-          onDragOver={handleDrag}
-          onDrop={handleDrop}
-          onClick={handleClick}
+      {!previewImage ? (
+        // Upload Zone
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="glassmorphism dark:glassmorphism-dark rounded-2xl p-8 upload-zone"
         >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleChange}
-            className="hidden"
-          />
+          <div
+            className={`border-2 border-dashed rounded-xl p-8 text-center transition-all ${
+              dragActive
+                ? "border-saffron bg-saffron/10"
+                : "border-saffron/60 hover:border-saffron"
+            }`}
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+            onClick={handleClick}
+          >
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleChange}
+              className="hidden"
+            />
 
-          <div className="mb-6">
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="floating-icon"
-            >
-              <CloudUpload className="w-16 h-16 text-saffron mx-auto" />
-            </motion.div>
+            <div className="mb-6">
+              <motion.div
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="floating-icon"
+              >
+                <CloudUpload className="w-16 h-16 text-saffron mx-auto" />
+              </motion.div>
+            </div>
+
+            <h3 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
+              Upload Monument Image
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
+              Drag and drop your image here, or click to browse
+            </p>
+            <Button className="bg-gradient-to-r from-saffron to-gold text-white hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+              Choose File
+            </Button>
+            <p className="text-sm text-gray-500 mt-4">
+              Supports: JPEG, PNG, WebP up to 10MB
+            </p>
           </div>
-
-          <h3 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
-            Upload Monument Image
-          </h3>
-          <p className="text-gray-600 dark:text-gray-300 mb-6">
-            Drag and drop your image here, or click to browse
-          </p>
-          <Button className="bg-gradient-to-r from-saffron to-gold text-white hover:shadow-lg transition-all duration-300 transform hover:scale-105">
-            Choose File
-          </Button>
-          <p className="text-sm text-gray-500 mt-4">
-            Supports: JPEG, PNG, WebP up to 10MB
-          </p>
-        </div>
-      </motion.div>
-
-      {/* Image Preview */}
-      {previewImage && (
+        </motion.div>
+      ) : (
+        // Preview Section
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

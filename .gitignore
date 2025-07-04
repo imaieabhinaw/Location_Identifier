@@ -1,0 +1,29 @@
+.venv
+.vscode/
+
+# Django
+.env
+
+# Node
+node_modules
+
+# React
+build
+
+# TensorFlow
+location_identifier_model.h5
+
+# Other
+db.sqlite3
+
+# Logs
+logs
+
+# Cache
+__pycache__
+
+# Pyc
+*.pyc
+
+# dataset
+dataset
